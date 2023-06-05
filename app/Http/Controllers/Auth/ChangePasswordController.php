@@ -11,6 +11,24 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ChangePasswordController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth');
+    }
+
+    public function index(){
+        return view('ChangePassword');
+    }
+    
+    public function store(Request $request){
+        $request->validate([
+            'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed', new MatchOldPassword],
+        ]);
+
+        User::find(auth()->user()->id)->update(['password'=> Hash::make($request->password)]);
+   
+        dd('Password change successfully.');
+    } 
     public function edit()
     {
         abort_if(Gate::denies('profile_password_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');

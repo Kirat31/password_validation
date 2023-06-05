@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Hash;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -19,6 +20,8 @@ class User extends Authenticatable
     use HasFactory;
 
     public $table = 'users';
+
+
 
     protected $hidden = [
         'remember_token',
@@ -68,6 +71,11 @@ class User extends Authenticatable
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPassword($token));
+    }
+
+    public function passwordHistories()
+    {
+        return $this->hasMany('App\PasswordHistory');
     }
 
     public function roles()

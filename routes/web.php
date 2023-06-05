@@ -1,4 +1,7 @@
 <?php
+
+//use App\Http\Controllers\Auth\ForgotPasswordController;
+
 Route::redirect('/', '/login');
 Route::get('/home', function () {
     if (session('status')) {
@@ -8,7 +11,17 @@ Route::get('/home', function () {
     return redirect()->route('admin.home');
 });
 
-Auth::routes(['register' => false]);
+Auth::routes();
+
+//Route::group(['middleware' => 'password.expiration'], function () {    
+    Route::get('passwords/expired', 'Auth\ExpiredPasswordController@index')->name('expired');
+    //Route::post('password/post_expired', 'Auth\ExpiredPasswordController@postExpired')->name('password.post_expired');
+   //   Route::get('/home', function () {
+   //      return redirect()->route('admin.home');
+   //  });
+//});
+
+
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
     Route::get('/', 'HomeController@index')->name('home');
@@ -61,3 +74,10 @@ Route::group(['prefix' => 'csat', 'as' => 'csat.','namespace' => 'CSAT'], functi
     Route::post('store/{surveyid}/{uniqueid}','EntriesController@store')->name('store');
 });
 
+// Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
+// Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
+
+Route::get('change-password', 'ChangePasswordController@index');
+Route::post('change-password', 'ChangePasswordController@store')->name('change.password');
+
+ 

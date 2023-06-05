@@ -4,10 +4,14 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\PasswordHistory;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+//use Illuminate\Support\Facades\Password;
+
+
 
 class RegisterController extends Controller
 {
@@ -31,6 +35,7 @@ class RegisterController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
+
     /**
      * Create a new controller instance.
      */
@@ -46,10 +51,21 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+        // $dbUser = User::find($user->id);
+        // if(!Hash::check($request->password, $dbUser->password)){
+        //     return redirect()->back()->withErrors(['password's=>'No previous passwords']);
+        // }
+        
         return Validator::make($data, [
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:8', 'confirmed' , 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/'
+            // Password::min(8)
+            // ->letters()
+            // ->mixedCase()
+            // ->numbers()
+            // ->symbols()
+        ],
         ]);
     }
 
@@ -58,12 +74,27 @@ class RegisterController extends Controller
      *
      * @return \App\User
      */
-    protected function create(array $data)
+    public function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name'     => $data['name'],
             'email'    => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+        
+        $passwordHistory = PasswordHistory::create([
+            'user_id' => $user->id,
+            'password' => Hash::make($data['password'])
+        ]);
+    
+        
+        return $user;
     }
+
+    
+    protected function redirectTo(){
+        return '/admin';
+    }
+
+    
 }

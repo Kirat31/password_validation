@@ -28,8 +28,14 @@ class UpdatePasswordRequest extends FormRequest
      */
     public function rules()
     {
+        $dbUser = User::find($user->id);
+        if(Hash::check($request->password, $dbUser->password)){
+            return redirect()->back()->withErrors(['password'=>'No previous passwords']);
+        }
+
+        
         return [
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:8', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/', 'confirmed'],
         ];
     }
 }

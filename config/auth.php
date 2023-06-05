@@ -98,4 +98,6 @@ return [
             'expire'   => 60,
         ],
     ],
+
+    'password_expires_days' => 2,
 ];
