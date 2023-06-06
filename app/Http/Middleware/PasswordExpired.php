@@ -30,6 +30,7 @@ class PasswordExpired
                 return redirect()->route('expired');
             }
         }
+
         return $next($request);
     }
 }

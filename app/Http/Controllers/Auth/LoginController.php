@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -26,7 +27,18 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+
+     protected function authenticated(Request $request, $user)
+    {
+        // Check if the user's password is expired (older than 2 days)
+        $passwordExpirationDate = now()->subDays(2);
+        if ($user->updated_at < $passwordExpirationDate) {
+            return redirect()->route('expired');
+        }
+
+        return redirect()->intended($this->redirectPath());
+    }
+    //protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
      * Create a new controller instance.
