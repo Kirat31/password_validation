@@ -1,8 +1,11 @@
 <?php
 
 //use App\Http\Controllers\Auth\ForgotPasswordController;
+Auth::routes();
 
 Route::redirect('/', '/login');
+
+
 Route::get('/home', function () {
     if (session('status')) {
         return redirect()->route('admin.home')->with('status', session('status'));
@@ -11,21 +14,21 @@ Route::get('/home', function () {
     return redirect()->route('admin.home');
 });
 
-Auth::routes();
+//Route::post('/login', 'Auth\LoginController@authenticated')->name('login');
 
 //Route::group(['middleware' => 'password.expiration'], function () {    
+
+    Route::get('/passwords/expired', 'Auth\ExpiredPasswordController@index')->name('password.expired');
     
     Route::middleware(['auth'])->group(function () {
         Route::middleware(['password_expired'])->group(function () {
-            Route::get('/dashboard', function () {
+            Route::any('/dashboard', function () {
                 return 'See dashboard';
             });
         });
     
-        Route::get('password/expired', 'Auth\ExpiredPasswordController@index')
-            ->name('password.expired');
-        Route::post('password/post_expired', 'Auth\ExpiredPasswordController@postExpired')
-            ->name('password.post_expired');
+        Route::get('/passwords/expired', 'Auth\ExpiredPasswordController@index')->name('password.expired');
+        Route::post('password/post_expired', 'Auth\ExpiredPasswordController@post_expired')->name('password.post_expired');
     });
 //});
 

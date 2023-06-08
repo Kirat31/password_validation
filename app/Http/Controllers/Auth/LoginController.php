@@ -30,10 +30,12 @@ class LoginController extends Controller
 
      protected function authenticated(Request $request, $user)
     {
+        
         // Check if the user's password is expired (older than 2 days)
         $passwordExpirationDate = now()->subDays(2);
         if ($user->updated_at < $passwordExpirationDate) {
-            return redirect()->route('expired');
+            // dd('inside if block');
+            return redirect()->route('password.expired');
         }
 
         return redirect()->intended($this->redirectPath());
