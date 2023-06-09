@@ -177,6 +177,7 @@ class ComposerStaticInit6dd80c00159d232cb617ed2cb54f48ed
         'A' => 
         array (
             'Asm89\\Stack\\' => 12,
+            'App\\Http\\Controllers\\' => 21,
             'App\\' => 4,
         ),
     );
@@ -534,6 +535,10 @@ class ComposerStaticInit6dd80c00159d232cb617ed2cb54f48ed
         array (
             0 => __DIR__ . '/..' . '/asm89/stack-cors/src',
         ),
+        'App\\Http\\Controllers\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/app/Http/Controllers',
+        ),
         'App\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app',
@@ -564,6 +569,7 @@ class ComposerStaticInit6dd80c00159d232cb617ed2cb54f48ed
         'App\\Http\\Controllers\\Admin\\UsersController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/UsersController.php',
         'App\\Http\\Controllers\\Auth\\ChangePasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ChangePasswordController.php',
         'App\\Http\\Controllers\\Auth\\ConfirmPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ConfirmPasswordController.php',
+        'App\\Http\\Controllers\\Auth\\ExpiredPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ExpiredPasswordController.php',
         'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
         'App\\Http\\Controllers\\Auth\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/LoginController.php',
         'App\\Http\\Controllers\\Auth\\RegisterController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/RegisterController.php',
@@ -576,6 +582,7 @@ class ComposerStaticInit6dd80c00159d232cb617ed2cb54f48ed
         'App\\Http\\Middleware\\AuthGates' => __DIR__ . '/../..' . '/app/Http/Middleware/AuthGates.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
         'App\\Http\\Middleware\\EncryptCookies' => __DIR__ . '/../..' . '/app/Http/Middleware/EncryptCookies.php',
+        'App\\Http\\Middleware\\PasswordExpired' => __DIR__ . '/../..' . '/app/Http/Middleware/PasswordExpired.php',
         'App\\Http\\Middleware\\PreventRequestsDuringMaintenance' => __DIR__ . '/../..' . '/app/Http/Middleware/PreventRequestsDuringMaintenance.php',
         'App\\Http\\Middleware\\RedirectIfAuthenticated' => __DIR__ . '/../..' . '/app/Http/Middleware/RedirectIfAuthenticated.php',
         'App\\Http\\Middleware\\SetLocale' => __DIR__ . '/../..' . '/app/Http/Middleware/SetLocale.php',
@@ -588,6 +595,7 @@ class ComposerStaticInit6dd80c00159d232cb617ed2cb54f48ed
         'App\\Http\\Requests\\MassDestroyPermissionRequest' => __DIR__ . '/../..' . '/app/Http/Requests/MassDestroyPermissionRequest.php',
         'App\\Http\\Requests\\MassDestroyRoleRequest' => __DIR__ . '/../..' . '/app/Http/Requests/MassDestroyRoleRequest.php',
         'App\\Http\\Requests\\MassDestroyUserRequest' => __DIR__ . '/../..' . '/app/Http/Requests/MassDestroyUserRequest.php',
+        'App\\Http\\Requests\\PasswordExpiredRequest' => __DIR__ . '/../..' . '/app/Http/Requests/PasswordExpiredRequest.php',
         'App\\Http\\Requests\\StoreAbandonedCallRequest' => __DIR__ . '/../..' . '/app/Http/Requests/StoreAbandonedCallRequest.php',
         'App\\Http\\Requests\\StoreContactRequest' => __DIR__ . '/../..' . '/app/Http/Requests/StoreContactRequest.php',
         'App\\Http\\Requests\\StorePermissionRequest' => __DIR__ . '/../..' . '/app/Http/Requests/StorePermissionRequest.php',
@@ -615,6 +623,7 @@ class ComposerStaticInit6dd80c00159d232cb617ed2cb54f48ed
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',
         'App\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/app/Providers/EventServiceProvider.php',
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
+        'App\\Rules\\CustomPasswordRule' => __DIR__ . '/../..' . '/app/Rules/CustomPasswordRule.php',
         'Asm89\\Stack\\Cors' => __DIR__ . '/..' . '/asm89/stack-cors/src/Cors.php',
         'Asm89\\Stack\\CorsService' => __DIR__ . '/..' . '/asm89/stack-cors/src/CorsService.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',

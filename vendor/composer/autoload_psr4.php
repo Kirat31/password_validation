@@ -93,5 +93,6 @@ return array(
     'Brick\\Math\\' => array($vendorDir . '/brick/math/src'),
     'Barryvdh\\Debugbar\\' => array($vendorDir . '/barryvdh/laravel-debugbar/src'),
     'Asm89\\Stack\\' => array($vendorDir . '/asm89/stack-cors/src'),
+    'App\\Http\\Controllers\\' => array($baseDir . '/app/Http/Controllers'),
     'App\\' => array($baseDir . '/app'),
 );

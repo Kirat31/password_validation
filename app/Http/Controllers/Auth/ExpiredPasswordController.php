@@ -18,9 +18,7 @@ class ExpiredPasswordController extends Controller
 {
     //use ResetsPasswords;
     protected $redirectTo = RouteServiceProvider::HOME;
-    
-    
-    
+       
     public function index(Request $request){
         return view('auth.passwords.expired');
     }

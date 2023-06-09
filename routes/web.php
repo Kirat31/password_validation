@@ -1,6 +1,7 @@
 <?php
 
-//use App\Http\Controllers\Auth\ForgotPasswordController;
+// use App\Http\Controllers\Auth\ForgotPasswordController;
+// use App\Http\Controllers\Auth\ChangePasswordController;
 Auth::routes();
 
 Route::redirect('/', '/login');
@@ -18,7 +19,7 @@ Route::get('/home', function () {
 
 //Route::group(['middleware' => 'password.expiration'], function () {    
 
-    Route::get('/passwords/expired', 'Auth\ExpiredPasswordController@index')->name('password.expired');
+    //Route::get('/passwords/expired', 'Auth\ExpiredPasswordController@index')->name('password.expired');
     
     Route::middleware(['auth'])->group(function () {
         Route::middleware(['password_expired'])->group(function () {
@@ -32,7 +33,8 @@ Route::get('/home', function () {
     });
 //});
 
-
+Route::get('/change-password', 'Auth\ChangePasswordController@index')->name('password.change');
+Route::post('/change-password/store', 'Auth\ChangePasswordController@store')->name('password.update');
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
     Route::get('/', 'HomeController@index')->name('home');
@@ -73,7 +75,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
     // Change password
     if (file_exists(app_path('Http/Controllers/Auth/ChangePasswordController.php'))) {
-        Route::get('password', 'ChangePasswordController@edit')->name('password.edit');
+        Route::get('password', 'ChangePasswordController@edit')->name('password.change');
         Route::post('password', 'ChangePasswordController@update')->name('password.update');
         Route::post('profile', 'ChangePasswordController@updateProfile')->name('password.updateProfile');
         Route::post('profile/destroy', 'ChangePasswordController@destroy')->name('password.destroyProfile');
@@ -85,10 +87,9 @@ Route::group(['prefix' => 'csat', 'as' => 'csat.','namespace' => 'CSAT'], functi
     Route::post('store/{surveyid}/{uniqueid}','EntriesController@store')->name('store');
 });
 
-// Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
+Route::get('forget-password', 'Auth\ForgotPasswordController@index')->name('forget.password');
 // Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
 
-Route::get('change-password', 'ChangePasswordController@index');
-Route::post('change-password', 'ChangePasswordController@store')->name('change.password');
+
 
  

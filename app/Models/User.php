@@ -44,6 +44,7 @@ class User extends Authenticatable
         'created_at',
         'updated_at',
         'deleted_at',
+        'password_histories',
     ];
 
     public function getIsAdminAttribute()
@@ -82,8 +83,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class);
     }
-
-    protected function serializeDate(DateTimeInterface $date)
+   protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
     }

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\User;
 use App\Rules\CustomPasswordRule;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Facades\Support\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illumninate\Validation\Rules;
 //use Illuminate\Facades\Support\Password;
 use Illuminate\Foundation\Auth\ResetsPasswords;
@@ -41,7 +43,7 @@ class ResetPasswordController extends Controller
     use ResetsPasswords;
     protected $redirectTo = RouteServiceProvider::HOME;
 
-    /**
+    /* *
      * Where to redirect users after resetting their password.
      *
      * @var string
@@ -67,9 +69,27 @@ class ResetPasswordController extends Controller
         ]);
     }
 
-    // public function checkOldPassword(Request $request) {
-        
-    // }
+    public function checkOldPassword(Request $request) {
+        $user = $request->user();
+        $newPassword = $request->input('password');
+        $previousPasswords = json_decode($user->password_history, true);
+        if (in_array(Hash::make($newPassword), $previousPasswords)) {
+            return redirect()->back()->withErrors(['password' => 'Password cannot be one of the old passwords']);
+        }
 
-    
+        $hashedPassword = Hash::make($newPassword);
+        $user->password = $hashedPassword;
+        $passwordHistory = array_slice($previousPasswords, -5); // Keep the last 4 passwords
+        $passwordHistory[] = $hashedPassword;
+        $user->password_history = json_encode($passwordHistory);
+
+        $user->save();
+
+        $request->user()->update([
+            'password' => bcrypt($request->password),
+            'updated_at' => Carbon::now()->toDateTimeString()
+        ]);
+        return redirect()->route('admin.home')->with('status', 'Password changed successfully');
+
+    }    
 }

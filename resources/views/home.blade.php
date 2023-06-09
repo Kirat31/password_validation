@@ -14,8 +14,16 @@
                             {{ session('status') }}
                         </div>
                     @endif
-
+                    @if(session('error'))
+                    <div class="alert alert-danger" role="alert">
+                        {{ session('error') }}
+                    </div>
+                    @endif
                     You are logged in!
+                    <br>
+                    <br>
+                    Click here to <a href="{{ route('password.change') }}">Change Password</a>
+
                 </div>
             </div>
         </div>
