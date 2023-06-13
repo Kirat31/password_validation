@@ -10,8 +10,6 @@ use App\Models\Queue;
 use Debugbar;
 use DB;
 
-
-
 class LiveDashController extends Controller {
 
 

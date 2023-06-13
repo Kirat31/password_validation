@@ -35,7 +35,7 @@ class UpdatePasswordHistories extends Command
             $previousPasswords = json_decode($user->password_history, true) ?? [];
 
             // Add the current password to the password histories
-            $previousPasswords[] = Hash::make($user->password);
+            $previousPasswords[] = sha1($user->password);
 
             // Update the password_histories column
             $user->password_history = json_encode($previousPasswords);

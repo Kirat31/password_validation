@@ -39,8 +39,7 @@ class RegisterController extends Controller
     /**
      * Create a new controller instance.
      */
-    public function __construct()
-    {
+    public function __construct(){
         $this->middleware('guest');
     }
 
@@ -79,22 +78,20 @@ class RegisterController extends Controller
         $user = User::create([
             'name'     => $data['name'],
             'email'    => $data['email'],
-            'password' => Hash::make($data['password']),
+            'password' => sha1($data['password']),
         ]);
         
         $passwordHistory = PasswordHistory::create([
             'user_id' => $user->id,
-            'password' => Hash::make($data['password'])
+            'password' => sha1($data['password'])
         ]);
     
         
         return $user;
     }
 
-    
     protected function redirectTo(){
         return '/admin';
     }
-
-    
+   
 }

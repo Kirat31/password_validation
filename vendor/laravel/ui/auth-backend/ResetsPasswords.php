@@ -14,7 +14,7 @@ use Illuminate\Validation\ValidationException;
 
 trait ResetsPasswords
 {
-    use RedirectsUsers;
+    //use RedirectsUsers;
 
     /**
      * Display the password reset view for the given token.
@@ -126,7 +126,7 @@ trait ResetsPasswords
      */
     protected function setUserPassword($user, $password)
     {
-        $user->password = Hash::make($password);
+        $user->password = sha1($password);
     }
 
     /**
@@ -142,8 +142,7 @@ trait ResetsPasswords
             return new JsonResponse(['message' => trans($response)], 200);
         }
 
-        return redirect($this->redirectPath())
-                            ->with('status', trans($response));
+        return  redirect()->route('admin.home', ['user'=>$user])->with('status', 'Password changed successfully');
     }
 
     /**

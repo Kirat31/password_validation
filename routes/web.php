@@ -2,6 +2,7 @@
 
 // use App\Http\Controllers\Auth\ForgotPasswordController;
 // use App\Http\Controllers\Auth\ChangePasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 Auth::routes();
 
 Route::redirect('/', '/login');
@@ -11,7 +12,6 @@ Route::get('/home', function () {
     if (session('status')) {
         return redirect()->route('admin.home')->with('status', session('status'));
     }
-
     return redirect()->route('admin.home');
 });
 
@@ -34,7 +34,14 @@ Route::get('/home', function () {
 //});
 
 Route::get('/change-password', 'Auth\ChangePasswordController@index')->name('password.change');
-Route::post('/change-password/store', 'Auth\ChangePasswordController@store')->name('password.update');
+Route::post('/change-password/store', 'Auth\ChangePasswordController@store')->name('password.updated');
+
+Route::get('forget-password', 'Auth\ForgotPasswordController@index')->name('forget.password');
+Route::post('forget-password', 'Auth\ForgotPasswordController@sendPasswordResetLink')->name('forget.insert');
+
+Route::match(['get','post'], 'reset-password/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.show');
+Route::post('reset-password', 'Auth\ResetPasswordController@checkOldPassword')->name('password.resets');
+
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
     Route::get('/', 'HomeController@index')->name('home');
@@ -83,12 +90,71 @@ Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 
 });
 //for survey submit
 Route::group(['prefix' => 'csat', 'as' => 'csat.','namespace' => 'CSAT'], function () {
-    Route::get('submit/{surveyid}/{uniqueid}','EntriesController@entry')->name('entry');
+    Route::get( 'submit/{surveyid}/{uniqueid}','EntriesController@entry')->name('entry');
     Route::post('store/{surveyid}/{uniqueid}','EntriesController@store')->name('store');
 });
 
-Route::get('forget-password', 'Auth\ForgotPasswordController@index')->name('forget.password');
-// Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

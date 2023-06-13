@@ -38,14 +38,12 @@ class ChangePasswordController extends Controller
         return view('auth.passwords.change');
     }
     protected function validator(array $data)
-    {
-        
+    { 
         return Validator::make($data, [
-            'password' => ['required', 'string', 'min:8', 'confirmed' , 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/', 'different:current_password'],
+            'password' => ['required', 'string', 'min:8', 'confirmed' , 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/'],
         ]);
     }
     public function store(Request $request){
-        
         
         $data = $request->all();
         $validator = $this->validator($data);
@@ -59,21 +57,30 @@ class ChangePasswordController extends Controller
         }
         
         $user = $request->user();
+        
         $newPassword = $request->input('password');
+       
         $passwordHistory = json_decode($user->password_history, true);
-        if (in_array(Hash::make($newPassword), $password_history)) {
-            return redirect()->back()->withErrors(['password' => 'Password cannot be one of the old passwords']);
+        $len = count($passwordHistory);
+        //dd($len);
+        for($i=0; $i<$len; $i++){
+            if(Hash::check($newPassword, $passwordHistory[$i])){
+                return redirect()->back()->withErrors(['password' => 'Password cannot be one of the old passwords']);
+            }
         }
+        // if (in_array(Hash::check($newPassword, $passwordHistory))) {
+        //     return redirect()->back()->withErrors(['password' => 'Password cannot be one of the old passwords']);
+        // }
 
         $hashedPassword = Hash::make($newPassword);
         $user->password = $hashedPassword;
-        $passwordHistory = array_slice($previousPasswords, -4); // Keep the last 4 passwords
+        $passwordHistory = array_slice($passwordHistory, -4); // Keep the last 4 passwords
         $passwordHistory[] = $hashedPassword;
         $user->password_history = json_encode($passwordHistory);
 
         $user->save();
         $request->user()->update([
-            'password' => bcrypt($request->password),
+            'password' => Hash::make($request->password),
             'updated_at' => Carbon::now()->toDateTimeString()
         ]);
         return redirect()->route('admin.home')->with('status', 'Password changed successfully');

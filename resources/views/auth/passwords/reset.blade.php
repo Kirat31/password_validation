@@ -8,7 +8,7 @@
 
                 <p class="text-muted">{{ trans('global.reset_password') }}</p>
 
-                <form method="POST" action="{{ route('password.request') }}">
+                <form method="POST" action="{{ route('password.resets')}}">
                     @csrf
 
                     <!-- @foreach ($errors->all() as $error)
@@ -20,20 +20,16 @@
                     <div class="form-group">
                         <input id="email" type="email" name="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" autocomplete="email" autofocus placeholder="{{ trans('global.login_email') }}" value="{{ $email ?? old('email') }}">
 
-                        @if($errors->has('email'))
-                            <div class="invalid-feedback">
-                                {{ $errors->first('email') }}
-                            </div>
-                        @endif
+                        @error('email')
+                            <span style="color:Red;">{{ $message }}</span>
+                        @enderror
                     </div>
                     <div class="form-group">
                         <input id="password" type="password" name="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" placeholder="{{ trans('global.login_password') }}">
 
-                        @if($errors->has('password'))
-                            <div class="invalid-feedback">
-                                {{ $errors->first('password') }}
-                            </div>
-                        @endif
+                        @error('password')
+                            <span style="color:Red;">{{ $message }}</span>
+                            @enderror
                     </div>
                     <div class="form-group">
                         <input id="password-confirm" type="password" name="password_confirmation" class="form-control" placeholder="{{ trans('global.login_password_confirmation') }}">

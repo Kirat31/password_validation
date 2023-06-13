@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Auth;
 use App\Models\User;
 use App\Rules\CustomPasswordRule;
 use App\Http\Controllers\Controller;
+
+//use App\Http\Controllers\Admin\UsersController;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Facades\Support\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illumninate\Validation\Rules;
+use Illuminate\Support\Facades\Validator;
 //use Illuminate\Facades\Support\Password;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
@@ -27,54 +30,45 @@ class ResetPasswordController extends Controller
     |
     */
 
-    // public function updatePassword(Request $request)
-    // {
-    //     $request->validate([
-    //         'password' => ['required', 'string', new CustomPasswordRule],
-    //     ]);
-    
-    //     $dbUser = User::find($user->id);
-    //     return Hash::check($request->password, $dbUser->password);
-    //     // Password is valid, proceed with further actions
-
-    //     // ...
-    // }
-
-    use ResetsPasswords;
+   // use ResetsPasswords;
     protected $redirectTo = RouteServiceProvider::HOME;
-
-    /* *
-     * Where to redirect users after resetting their password.
-     *
-     * @var string
-     */
-
-    protected function rules(){
-        //$dbUser = User::find($user->id);
-        return [
-            'password' => ['required', 'min:8', 'confirmed', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/']
-        ];
-    }
-    public function validator(array $data)
+    
+    public function showResetForm(Request $request)
     {
-        $dbUser = User::find($user->id);
-        if(Hash::check($request->password, $dbUser->password)){
-            return redirect()->back()->withErrors(['password'=>'No previous passwords']);
-        }
+        $token = $request->route()->parameter('token');
+        return view('auth.passwords.reset')->with(
+            ['token' => $token, 'email' => $request->email]
+        );
+    }
 
+    protected function validator(array $data)
+    {
         return Validator::make($data, [
-            
-            'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email'    => ['required', 'string', 'email', 'max:255'],
             'password' => ['required', 'string', 'min:8', 'confirmed', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/'],
         ]);
     }
 
     public function checkOldPassword(Request $request) {
-        $user = $request->user();
+        $data = $request->all();
+        $validator = $this->validator($data);
+        //dd($data);
+
+        if($validator->fails()){
+            return redirect()->back()->withErrors($validator)->withInput(); 
+        }
+        $user = User::where('email', $request->email)->first();
+
         $newPassword = $request->input('password');
+        //$a = Hash::make($newPassword);
         $previousPasswords = json_decode($user->password_history, true);
-        if (in_array(Hash::make($newPassword), $previousPasswords)) {
-            return redirect()->back()->withErrors(['password' => 'Password cannot be one of the old passwords']);
+        //dd($previousPasswords);
+        $len = count($previousPasswords);
+        //dd($len);
+        for($i=0; $i<$len; $i++){
+            if(Hash::check($newPassword, $previousPasswords[$i])){
+                return redirect()->back()->withErrors(['password' => 'Password cannot be one of the old passwords']);
+            }
         }
 
         $hashedPassword = Hash::make($newPassword);
@@ -85,11 +79,10 @@ class ResetPasswordController extends Controller
 
         $user->save();
 
-        $request->user()->update([
-            'password' => bcrypt($request->password),
-            'updated_at' => Carbon::now()->toDateTimeString()
-        ]);
-        return redirect()->route('admin.home')->with('status', 'Password changed successfully');
-
+        return redirect('/login')->with('status', 'Password changed successfully');
+            //return $user;
     }    
+    // protected function redirectTo(){
+    //     return '/admin';
+    // } 
 }

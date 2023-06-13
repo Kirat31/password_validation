@@ -9,7 +9,7 @@
                 <p class="text-muted">{{ trans('Change password') }}</p>
             </div>
             <div class="card-body p-4">
-                <form action="{{ route('password.update') }}" method="POST">
+                <form action="{{ route('password.updated') }}" method="POST">
                 @csrf
 
                     <div class="form-group">
